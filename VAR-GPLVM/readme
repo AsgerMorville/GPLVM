@@ -1,1 +1,3 @@
 files for GPLVM
+Need to implement: gradient of psi1 wrt xu, gradient of psi2 wrt xu
+gradient of log wrt thetax,thetaf and beta
