@@ -1,95 +1,80 @@
 library(R.utils)
-sourceDirectory("Modules/",modifiedOnly = F)
+sourceDirectory("timedyn/Modules/",modifiedOnly = F)
 
 thetaf=list(sigmaf=1,lengthscales=1)
 theta = thetaf
-n <- t <- 100
+n <- t <- 30
 q <- 1
-m<-50
-p <- 5
+m<-30
+p <- 30
 #generate data object
 data <- generateData(t,p,q,parameters=theta)
+#data$x <- scale(data$x,center=T,scale=F)
 
-
-plot(1:100,data$x)
+plot(1:30,data$x)
 
 #Test of implementation
-indices <- seq(from=1,to=100,by=2)
+indices <- seq(from=1,to=n,by=1)
 
 modeltest <- list()
-modeltest$tvec <- as.matrix(1:100)
+modeltest$tvec <- as.matrix(1:30)
 modeltest$y <- data$y
-#modeltest$xu <- as.matrix(data$x[indices])
+modeltest$xu <- as.matrix(data$x[indices])
 
 #lambda
 modeltest$thetaf <- list(sigmaf=1,lengthscales=1)
-modeltest$thetax <- list(l=20,r=1)
-modeltest$beta <- 10
+modeltest$thetax <- list(l=1,r=1)
+modeltest$beta <- 100
+
 
 #mustart <- as.matrix(data$x)
-mustart <- eigenInit(data$y,1)
-Lstart <- matrix(rnorm(t*q,mean=0.5,sd=0.1),nrow=t,ncol=q)
-xustart <- as.matrix(mustart[indices])
+mustart <- 1000*eigenInit(data$y,1)
+
+#calibrateLambda(n,q,as.matrix(1:n))
+#Sjcalculator(matrix(runif(n*q,min=0.4,max=0.6)),as.matrix(1:n),n,q)
+obj <- calibrateLambda(n,q,modeltest$tvec)
+Lstart <- obj$covars
+#Check
+Sjcalculator(Lstart,as.matrix(1:30),n,q)
+#Lstart <- matrix(obj$covars,nrow=t,ncol=q)
+#xustart <- as.matrix(mustart[indices])
+#xustart <- as.matrix(runif(5))
+
+plot(1:30,mustart)
+
+#startguess <- listToVec(list(mubar=mustart,L=Lstart,xu=xustart))
+startguess <- listToVec(list(mubar=mustart,L=Lstart))
+#startguess <- listToVec(list(mubar=data$x,L=Lstart))
+#list <- vecToList(startguess,t,q,p,m)
 
 
-startguess <- listToVec(list(mu=mustart,L=Lstart,xu=xustart))
-plot(1:100,mustart)
+#plot(1:100,-mustart)
 
 end <- scg(vecLogLik,vecGradLogLik,startguess,1)
-plot(1:100,mustart)
+
+plot(1:t,data$x)
+plot(1:t,mustart)
+plot(1:t,end[1:t])
+plot(1:t,end[(t+1):(2*t)])
+plot(1:t,startguess[(t+1):(2*t)])
+plot(1:60,vecGradLogLik(startguess))
+plot(1:60,vecGradLogLik(end))
+modeltest$mubar <-as.matrix(end[1:100])
+modeltest$Lambda <- as.matrix(end[101:200])
+#modeltest$xu <- as.matrix(end[201:220])
+kx <-modCalculator(modeltest)$Kx
+kx-data$kx
+plot(1:100,kx%*%end[1:100])
+
+
+
+
+
 plot(1:100,data$x)
 
-plot(1:100,end[1:100])
 
+plot(1:100,data$x)
 
 modeltest$xu
 
 
-
-
-
-
-
-
-n<- 5
-q <- 3 
-p <- 4
-m <-2
-modd <- list()
-modd$y <- matrix(1:(n*p),nrow=n,ncol=p,byrow=F)
-modd$mubar <- matrix(1:(n*q),nrow=n,byrow=F)
-modd$Lambda <- matrix(runif(n*q),nrow=n,ncol=q)
-modd$tvec <- as.matrix(1:n)
-modd$xu <- matrix(1:(m*q),nrow=m,ncol=q,byrow=F)
-modd$thetaf <- list(w=1:q,sigmaf=1)
-modd$thetax <- list(r=1,l=1)
-modd$beta <- 100
-#modd$hyper <- list(w=1:q,sigmaf=1,sigma=1,par=list(r=1,l=1))
-
-
-#Main script: we are given data Y in R t times p. We decide latent dim, q. 
-
-#ModInit: initial guess
-ModInit <- list()
-
-
-mod1 <- modCalculator(modd)
-
-logLik2(modd)
-dFhatdmu(mod1)
-
-
-
-S1 <- matrix(NA,ncol=q,nrow=n)
-for (i in 1:q){
-  S1[,i]<- diag(as.matrix(S[,,q]))
-}
-psistatsobj <- psistats(mu,S,xu,hyper,n,m)
-psistatsobj
-
-dPsi1dmu(2,3,psistatsobj$psi1,hyper$w,mu,S1,xu)
-dPsi2dmu(2,3,psistatsobj$psi2,hyper$w,mu,S1,xu)
-
-
-logLik(tvec,y,mu,S,xu,hyper)
-testmat <- matrix(c(2,0,0,1),ncol=2)

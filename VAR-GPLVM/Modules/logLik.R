@@ -52,5 +52,5 @@ logLik <- function(model){
     muj <- as.vector(mu[,j])
     KL <- KL +sum(diag(Ktinv%*%Sj+Ktinv%*%mu[,j]%*%t(mu[,j])))+2*sum(log(diag(L3)))-Sjdet
   }
-  return(loglik-KL)
+  return(loglik-0.5*KL)
 }

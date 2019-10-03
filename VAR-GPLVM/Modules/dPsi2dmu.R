@@ -2,7 +2,7 @@ dPsi2dmu <- function(nind,qind,mod){
   psi2 <- mod$psi2
   thetaf <- mod$thetaf
   mu <- mod$mu
-  l <- mod$Lambda
+  l <- mod$S_mat
   xu <- mod$xu
   w <- thetaf$lengthscales
   

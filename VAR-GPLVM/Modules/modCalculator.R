@@ -23,8 +23,11 @@ modCalculator <- function(model){
   #calculate variational means
   mu <- Kx%*%mubar
   
+  #Calculate S-matrix
+  S_mat <- Sjcalculator(Lambda,tvec,n,q)
+  
   #calculate psi-statistics
-  Psistats <- psistats(mu,Lambda,xu,thetaf,n,m)
+  Psistats <- psistats(mu,S_mat,xu,thetaf,n,m)
   psi0 <- Psistats$psi0
   psi1 <- Psistats$psi1
   psi2 <- Psistats$psi2
@@ -56,6 +59,7 @@ modCalculator <- function(model){
   mod$thetaf <- thetaf
   mod$thetax <- thetax
   mod$Kx <- Kx
+  mod$S_mat <- S_mat
   
   
   return(mod)

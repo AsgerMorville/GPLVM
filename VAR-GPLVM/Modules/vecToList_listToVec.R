@@ -6,8 +6,9 @@ vecToList <- function(vec,t,q,p,m){
   mubar <- matrix(vec[1:t*q],nrow=t,ncol=q,byrow=F)
   #Define lambda matrix
   Lambda <- matrix(vec[(t*q+1):(2*t*q)],nrow=t,ncol=q,byrow = F)
-  xu <- matrix(vec[(2*t*q+1):(m*q)],nrow=m,ncol=q,byrow=F)
-  return(list(mubar=mubar,Lambda=Lambda,xu=xu))
+  #xu <- matrix(vec[(2*t*q+1):(2*t*q+m*q)],nrow=m,ncol=q,byrow=F)
+  return(list(mubar=mubar,Lambda=Lambda))
+  #,xu=xu))
 }
 listToVec <- function(list){
   return(unlist(list))
@@ -20,7 +21,7 @@ vecLogLik <- function(vec){
 
   modeltest$mubar <- list$mubar
   modeltest$Lambda <- list$Lambda
-  modeltest$xu <- list$xu
+  #modeltest$xu <- list$xu
   return(-logLik(modeltest))
 }
 vecGradLogLik <- function(vec){
@@ -28,12 +29,12 @@ vecGradLogLik <- function(vec){
   #
   list <- vecToList(vec,t,q,p,m)
   
-  modeltest$mubar <- list$mu
+  modeltest$mubar <- list$mubar
   modeltest$Lambda <- list$Lambda
-  modeltest$xu <- list$xu
+  #modeltest$xu <- list$xu
   obj <- gradLoglik(modeltest)
   #Process obj so that it returns vec
-  #
+  
   vec <- listToVec(obj)
   return(-vec)
 }

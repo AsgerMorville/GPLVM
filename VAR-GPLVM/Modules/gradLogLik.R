@@ -12,7 +12,7 @@ gradLoglik <- function(model){
   
   gradobj$mubar <- dFdmubar(mod)
   gradobj$Lambda  <- dFdlambda(mod)
-  gradobj$xu <- dFdxu(mod)
+  #gradobj$xu <- dFdxu(mod)
   #gradobj$thetaf <- dFdthetaf(mod)
   #gradobj$thetax <- dFdthetax(mod)
   #gradobj$beta <- dFdbeta(mod)

@@ -69,7 +69,7 @@ scg <- function(f,derf,x,tol){
     }
     if (norm(x-x1,type="2")<0.00001){break}
     x <- x1
-    print(x[(t*q):(2*t*q)])
+    #print(x[(t*q):(2*t*q)])
     print(noiter)
     
   }

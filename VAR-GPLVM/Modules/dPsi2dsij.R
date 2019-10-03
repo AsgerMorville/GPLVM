@@ -8,7 +8,7 @@ dPsi2dsij <- function(i,j,mod){
   thetaf <- mod$thetaf
   for (k in 1:m){
     for (kp in 1:m){
-      output[k,kp] <- mod$psi2[k,kp]*(2*(wj*(2*mod$mu[i,j]-mod$xu[k,j]-mod$xu[kp,j])/(2*(2*wj*mod$L[i,j]+1)))^2-0.5*2*wj/(2*wj*mod$L[i,j]+1))
+      output[k,kp] <- mod$psi2[k,kp]*(2*(wj*(2*mod$mu[i,j]-mod$xu[k,j]-mod$xu[kp,j])/(2*(2*wj*mod$S_mat[i,j]+1)))^2-0.5*2*wj/(2*wj*mod$S_mat[i,j]+1))
     }
   }
   

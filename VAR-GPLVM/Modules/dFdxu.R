@@ -1,9 +1,9 @@
 dFdxu <- function(mod){
   #returns the matrix (m by q) of derivatives.
   #each poitn consists of sum of three points
-  t <- dim(mod$mu)[1]
+  m <- dim(mod$xu)[1]
   q <- dim(mod$mu)[2]
-  output <- matrix(NA,nrow=t,ncol=q)
+  output <- matrix(NA,nrow=m,ncol=q)
   #Obtain A matrix
   sigma <- sqrt(1/(mod$beta))
   psi1 <- mod$psi1
@@ -16,16 +16,16 @@ dFdxu <- function(mod){
   psi1trace <- YYt%*%psi1%*%Ainv
   psi2trace <- p*mod$Kuuinv-sigma^2*p*Ainv-Ainv%*%t(psi1)%*%YYt%*%psi1%*%Ainv
   kuutrace <- p*Kuuinv-(1/mod$beta)*p*Ainv-Ainv%*%t(psi1)%*%YYt%*%psi1%*%Ainv-mod$beta*p*Kuuinv%*%mod$psi2%*%Kuuinv
-  for (i in 1:t){
+  for (k in 1:m){
     for (j in 1:q){
       #Note that first term is zero
-      dPsi1dxu <- dPsi1dxu(i,j,mod)
-      dPsi2dxu <- dPsi2dxuu(i,j,mod)
-      dKuudxu <- dKuudxu(i,j,mod)
-      psi1term <- mod$beta*sum(diag(t(dPsi1dmuj)%*%psi1trace))
+      dPsi1dxu <- dPsi1dxu(k,j,mod)
+      dPsi2dxu <- dPsi2dxu(k,j,mod)
+      dKuudxu <- dKuudxu(k,j,mod)
+      psi1term <- mod$beta*sum(diag(t(dPsi1dxu)%*%psi1trace))
       kuuterm <- 0.5*sum(diag(dKuudxu%*%kuutrace))
-      psi2term <- 0.5*mod$beta*sum(diag(dPsi2dmuj%*%psi2trace))
-      output[i,j] <- psi1term+kuuterm+psi2term
+      psi2term <- 0.5*mod$beta*sum(diag(dPsi2dxu%*%psi2trace))
+      output[k,j] <- psi1term+kuuterm+psi2term
     }
   }
   return(output)

@@ -8,8 +8,8 @@ dKuudxu <- function(i,j,mod){
   x <- x[,j]
   output <- matrix(0,nrow=n,ncol=n)
   vec <- x[i]-x
-  output[i,] <- K[i,]
-  output[,i] <- K[,i]
+  output[i,] <- Kuu[i,]
+  output[,i] <- Kuu[,i]
   output[i,] <- output[i,]*(x-x[i])/l^2
   output[,i] <- output[,i]*(x-x[i])/l^2
   
