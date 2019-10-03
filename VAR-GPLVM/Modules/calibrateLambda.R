@@ -1,7 +1,7 @@
 #Function to initialise the L-values
 
 calibrateLambda <- function(n,q,tvec){
-  vdcrange <- seq(from=0.05,to=199,by=1)
+  vdcrange <- seq(from=0.05,to=3,by=1)
   initCovarMedian <- 0.18
   bestVdc <- 0.05
   bestDiff <- 1000
@@ -30,8 +30,8 @@ Sjcalculator <- function(L,tvec,n,q){
   output <- array(0,dim=c(n,n,q))
   output2 <- matrix(NA,nrow=n,ncol=q)
   for (j in 1:q){
-    output[,,j] <- as.matrix(Kxinv-diag(as.vector(L[,j])))
-    output2[,j] <- diag(as.matrix(output[,,j]))
+    output[,,j] <- solve(as.matrix(Kxinv+diag(as.vector(L[,j]))))
+    output2[,j] <- pmax(diag(as.matrix(output[,,j])),0.05)
   }
   #Extract diagonals
 

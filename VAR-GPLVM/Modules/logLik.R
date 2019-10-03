@@ -15,7 +15,7 @@ logLik <- function(model){
   mu <- mod$mu
   
   #Calculate W
-  L2 <- t(chol((1/sigma^2)*psi2+Kuu))
+  L2 <- t(chol((1/sigma^2)*psi2+Kuu+0.001*diag(n)))
   L2inv <- solve(L2)
   L2inv <- t(L2inv)%*%L2inv
   W <- (1/sigma^2)*diag(n)-(1/sigma^4)*psi1%*%L2inv%*%t(psi1)
@@ -27,10 +27,10 @@ logLik <- function(model){
   }
   sum <- -0.5*sum
   #ready to calculate final log likehood expression
-  loglik <- -p*n*log(sigma)+(p/2)*2*sum(log(diag(L)))-(p/2)*2*sum(log(diag(L2)))+sum
+  loglik <- -p*n*log(sigma)+(p/2)*2*sum(log(diag(mod$KuuL)))-(p/2)*2*sum(log(diag(L2)))+sum
   
   #add terms outside of log in (25)
-  loglik <- loglik-psi0/(2*sigma^2)+1/(2*sigma^2)*sum(diag(Kuuinv%*%psi2))
+  loglik <- loglik-p*psi0/(2*sigma^2)+p*1/(2*sigma^2)*sum(diag(Kuuinv%*%psi2))
   
   #Calculate KL divergence term. equation from page 17
   #First we need Kx, which we call Kt

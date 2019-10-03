@@ -9,6 +9,7 @@ vecToList <- function(vec,t,q,p,m){
   #xu <- matrix(vec[(2*t*q+1):(2*t*q+m*q)],nrow=m,ncol=q,byrow=F)
   return(list(mubar=mubar,Lambda=Lambda))
   #,xu=xu))
+  #return(list(mubar=mubar))
 }
 listToVec <- function(list){
   return(unlist(list))
