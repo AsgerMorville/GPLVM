@@ -14,7 +14,7 @@ dPsi2dsij <- function(i,j,mod){
   
   #Find the nind'th psi2 matrix
   psi2n <- matrix(NA,ncol=m,nrow=m)
-  Si <- as.vector(mod$Lambda[i,])
+  Si <- as.vector(mod$S_mat[i,])
   for (k in 1:m){
     for (kp in 1:m){
       xuk <- as.vector(xu[k,])
