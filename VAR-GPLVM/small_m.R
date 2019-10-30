@@ -15,7 +15,7 @@ data <- generateData(t,p,q,parameters=theta)
 plot(1:30,data$x)
 
 #Test of implementation
-indices <- seq(from=1,to=n,by=1)
+indices <- floor(seq(from=1,to=n,length.out = m))
 
 modeltest <- list()
 modeltest$tvec <- as.matrix(1:30)
@@ -46,11 +46,26 @@ Lstart <- matrix(obj$covars,nrow=t,ncol=q)
 plot(1:30,data$x)
 plot(1:30,-mustart)
 
+xustart <- (100*eigenInit(data$y,1))[indices]
 #startguess <- listToVec(list(mubar=mustart,L=Lstart,xu=xustart))
 maxlat <- apply(mustart,2,max)
 minlat <- apply(mustart,2,min)
 lengthscalestart <- 1/(maxlat-minlat)^2
-startguess <- listToVec(list(mubar=mustart,L=Lstart,xu=data$x,lengthscales=lengthscalestart))
+startguess <- listToVec(list(mubar=mustart,L=Lstart,xu=as.matrix(data$x[indices]),lengthscales=0.17))
+
+
+
+#end <- scg(vecLogLik,vecGradLogLik,startguess,1)
+end <- constrained_scg(vecLogLik,vecGradLogLik,startguess,1,c(31:60))
+
+
+
+
+library(numDeriv)
+num <- grad(vecLogLik,startguess)
+reel <- vecGradLogLik(startguess)
+plot(num-reel)
+
 #startguess <- listToVec(list(mubar=data$x,L=Lstart))
 #startguess<- mustart
 list <- vecToList(startguess,t,q,p,m)
@@ -60,22 +75,34 @@ vecLogLik(startguess)
 vecGradLogLik(startguess)
 #plot(1:100,-mustart)
 
-#end <- scg(vecLogLik,vecGradLogLik,startguess,1)
-end <- constrained_scg(vecLogLik,vecGradLogLik,c(startguess),1,c(31:60))
+#Numerical optimizer
+numgrad <- function(guess){
+  return(grad(vecLogLik,guess))
+}
 
+
+plot(end-startguess)
 vecLogLik(end)
 vecLogLik(startguess)
-vecLogLik(c(startguess,1))
+plot(end-startguess)
+num <- grad(vecLogLik,startguess)
+reel <- vecGradLogLik(startguess)
+plot(num)
+plot(reel)
+plot(reel-num)
+plot(vecGradLogLik(startguess))
+plot(jacobian(vecGradLogLik,startguess))
 plot(1:t,data$x,col="red")
-plot(1:t,(data$kx)%*%end[1:t])
+plot(1:t,-(data$kx)%*%end[1:t])
 plot(1:t,(data$kx)%*%mustart)
-plot(1:t,(data$kx)%*%end[1:t])
-
+plot(1:t,(data$kx)%*%end[(t+1):t])
+plot(mustart,end[1:t])
 #Test of gradients wrt xu
 #first 
 modeltest$mubar <-mustart
 modeltest$Lambda <- Lstart
-
+plot(startguess-end)
+plot(end)
 
 testfunc <- function(x){
   modeltest$xu <- as.matrix(x)

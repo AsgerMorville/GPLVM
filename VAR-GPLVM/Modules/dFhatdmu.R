@@ -9,8 +9,7 @@ dFhatdmu <- function(mod){
   #Obtain A matrix
   sigma <- sqrt(1/(mod$beta))
   psi1 <- mod$psi1
-  A <- (1/mod$beta)*mod$Kuu+mod$psi2
-  Ainv <- solve(A)
+  Ainv <- mod$Ainv
   YYt <- mod$y%*%t(mod$y)
   
   #calculate expressions inside trace terms as they dont change with i,j

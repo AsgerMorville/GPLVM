@@ -6,12 +6,9 @@ dPsi2dsij <- function(i,j,mod){
   xu <- mod$xu
   mu <- mod$mu
   thetaf <- mod$thetaf
-  
   for (k in 1:m){
     for (kp in 1:m){
       output[k,kp] <- as.numeric((2*(wj*(2*mod$mu[i,j]-mod$xu[k,j]-mod$xu[kp,j])/(2*(2*wj*mod$S_mat[i,j]+1)))^2-0.5*2*wj/(2*wj*mod$S_mat[i,j]+1)))
-      checkk <- as.numeric((2*(wj*(mu[i,j]-(xu[k,j]+xu[kp,j])/2)/(2*wj*mod$S_mat[i,j]+1))^2-wj/(2*wj*mod$S_mat[i,j]+1)))
-      output[k,kp] <- checkk
     }
   }
   

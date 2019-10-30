@@ -10,8 +10,8 @@ dKuudxu <- function(i,j,mod){
   vec <- x[i]-x
   output[i,] <- Kuu[i,]
   output[,i] <- Kuu[,i]
-  output[i,] <- output[i,]*(-1)*(x[i]-x)*l
-  output[,i] <- output[,i]*(x-x[i])*l
+  output[i,] <- output[i,]*(-1)*(x[i]-x)/l^2
+  output[,i] <- output[,i]*(x-x[i])/l^2
   
   output[i,i] <- 0
   return(output)

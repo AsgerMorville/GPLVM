@@ -8,7 +8,7 @@ generateData <- function(t,p,q,parameters){
   Ktinv <- solve(Kt)
   Kx <- fillup(as.matrix(x),ardkernel,list(sigmaf=1,lengthscales=1))
   y <- matrix(NA,nrow=p,ncol=t)
-  f <- matrix(NA,nrow=p,ncol=t)
+  f <- y
   for (i in 1:p){
     f[i,] <- mvrnorm(n=1,mu=rep(0,t),Sigma=Kx)
     y[i,] <- rnorm(t,mean=(f[i,]),sd=0.1)

@@ -4,8 +4,9 @@ dFhatds <- function(mod){
   q <- dim(mod$mu)[2]
   output <- matrix(NA,nrow=t,ncol=q)
   #Obtain A matrix
-
-  Ainv <- mod$Ainv
+  
+  A <- (1/mod$beta)*mod$Kuu+mod$psi2
+  Ainv <- solve(A)
   YYt <- mod$y%*%t(mod$y)
   sigma <- sqrt(1/(mod$beta))
   psi1 <- mod$psi1

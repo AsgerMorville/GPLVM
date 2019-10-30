@@ -82,8 +82,8 @@ constrained_scg <- function(f,derf,x,tol,constrainedind){
     x <- x1
     #print(x[(t*q):(2*t*q)])
     print(noiter)
-    #if (noiter > 200){break}
-    print(x[1:30])
+    if (noiter > 200){break}
+    
   }
   return(x1)
 }
